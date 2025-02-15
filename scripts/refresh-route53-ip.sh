@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 # load HOSTED_ZONE_ID and NAME from .env file
 source .env
 
@@ -15,7 +18,7 @@ fi
 
 if grep -Fxq "$IP" $CURRENT_VALUE_FILE; then
  echo "IP has not changed after checking local file, exiting"
- exit 1
+ exit 0
 fi
 
 aws route53 list-resource-record-sets --hosted-zone-id $HOSTED_ZONE_ID \
@@ -24,7 +27,7 @@ aws route53 list-resource-record-sets --hosted-zone-id $HOSTED_ZONE_ID \
 
 if grep -Fxq "$IP" $CURRENT_VALUE_FILE; then
  echo "IP has not changed after checking AWS, exiting"
- exit 1
+ exit 0
 fi
 
 cat > $CHANGES_FILE << EOF
